@@ -78,3 +78,52 @@ function execute() {
   allToDos.push(new ToDo(collect[0], collect[1], collect[2], collect[3], collect[4], collect[5]))
   allToDos.forEach(x => console.log(x))
 }
+
+const addProjectButton = document.querySelector('.new');
+addProjectButton.addEventListener('click', (e) => {
+  const div = document.createElement('div');
+  div.classList.add('add-project');
+  const input = document.createElement('input');
+  input.id = "project-name";
+  input.name = "project-name";
+  div.appendChild(input);
+  const addButton = document.createElement('button');
+  addButton.innerHTML = "Add";
+  addButton.classList.add('add-button');
+  addButton.addEventListener('click', addNewProject)
+  div.appendChild(addButton);
+  const cancelButton = document.createElement('button');
+  cancelButton.innerHTML = "Cancel";
+  cancelButton.classList.add('cancel-button');
+  cancelButton.addEventListener('click', cancelNewProject);
+  div.appendChild(cancelButton);
+  document.querySelector('.project-container').appendChild(div);
+})
+
+function cancelNewProject() {
+  const projectContainer = document.querySelector('.project-container');
+  projectContainer.removeChild(projectContainer.lastElementChild);
+}
+
+function addNewProject() {
+  const input = document.getElementById('project-name');
+  if (input.value === "") return;
+  const div = document.createElement('div');
+  div.classList.add('project');
+  const img = document.createElement('img');
+  img.classList.add('project-image');
+  img.src = "./assets/project-management-icon-png-14.jpg";
+  img.alt = "Project";
+  div.appendChild(img);
+  const h3 = document.createElement('h3');
+  h3.classList.add('project-name');
+  h3.innerHTML = input.value;
+  div.appendChild(h3);
+  const svg = document.createElement('img')
+  svg.classList.add('delete-project');
+  svg.src = "./assets/trash-svgrepo-com.svg";
+  svg.alt = "Delete Project";
+  div.appendChild(svg)
+  cancelNewProject();
+  document.querySelector('.project-container').appendChild(div);
+}
