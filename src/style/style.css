@@ -69,6 +69,11 @@ aside {
 
 .new:hover {
   cursor: pointer;
+  transform: scale(1.2);
+}
+
+.new:active {
+  transform: scale(1.1)
 }
 
 .project-text {
@@ -118,6 +123,14 @@ aside {
   height: 25px;
   visibility: hidden;
   margin-bottom: 5px;
+}
+
+.delete-project:hover {
+  transform: scale(1.2);
+}
+
+.delete-project:active {
+  transform: scale(1.1);
 }
 
 .add-project {
