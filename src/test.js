@@ -102,3 +102,29 @@ const control = {
 
 const addProjectButton = document.querySelector('.new');
 addProjectButton.addEventListener('click', domControl.newProjectPrompt)
+
+const addCheck = document.getElementById('addcheck');
+addCheck.addEventListener('click', () => {
+  const checks = document.querySelectorAll('.newCardChecklist > li');
+  if (checks.length > 5) return;
+  const li = document.createElement('li');
+  li.classList.add('newCardChecklist');
+  const input = document.createElement('input');
+  input.type = "text";
+  input.name = "check";
+  li.appendChild(input);
+  document.querySelector('.todoCard > ul.newCardChecklist').appendChild(li);
+})
+
+const addTodotest = document.getElementById('submittodo');
+addTodotest.addEventListener('click', (e) => {
+  console.log(e);
+  console.log(e.target.parentElement);
+  const children = Array.from(e.target.parentElement.childNodes).filter(x => /INPUT|SELECT|UL/.test(x.tagName))
+  const checkList = children.splice(children.length - 1, 1);
+  console.log(children, checkList);
+  const mapped = children.map(x => x.value);
+  console.log(mapped)
+  const checkListValue = checkList.map(x => Array.from(x.childNodes))[0].filter(x => x.tagName === "LI").map(x => x.firstChild.value);
+  console.log(checkListValue)
+})

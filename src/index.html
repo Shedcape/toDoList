@@ -28,25 +28,67 @@
     </div>
   </aside>
   <div class="container">
-    <h1>To Do</h1>
-    <label for="title">Title</label>
-    <input type="text" name="title" id="title">
-    <label for="description">Description</label>
-    <input type="text" name="description" id="description">
-    <label for="duedate">Due Date</label>
-    <input type="datetime-local" name="duedate" id="duedate">
-    <label for="priority">Priority</label>
-    <select name="priority" id="priority">
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-    </select>
-    <label for="checklist">Checklist</label>
-    <ul>
-      <li><input type="text" name="check"></li>
-    </ul>
-    <button id="addcheck">Add</button>
-    <button id="execute">Submit Todo</button>
+    <div class="todoCard">
+      <h1 class="todoTitle">Power Bill</h1>
+      <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
+      <p class="todoCategory">Description: </p>
+      <p class="todoText">Call the electric company regarding the bill. It's too high!</p>
+      <p class="todoCategory">Due date: </p>
+      <p class="todoText">2022-08-31</p>
+      <p class="todoCategory">Priority: </p>
+      <p class="todoText">High</p>
+      <p class="todoCategory">Checklist:</p>
+      <ul class="todoChecklist">
+        <li>Pick up phone</li>
+        <li>Input numbers</li>
+        <li>Click call</li>
+        <li>Pick up phone</li>
+        <li>Input numbers</li>
+        <li>Click call</li>
+      </ul>
+    </div>
+    <div class="todoCard">
+      <h1 class="todoTitle">Power Bill</h1>
+      <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
+      <p class="todoCategory">Description: </p>
+      <p class="todoText">Call the electric company regarding the bill. It's too high!</p>
+      <p class="todoCategory">Due date: </p>
+      <p class="todoText">2022-08-31</p>
+      <p class="todoCategory">Priority: </p>
+      <p class="todoText">High</p>
+      <p class="todoCategory">Checklist:</p>
+      <ul class="todoChecklist">
+        <li>Pick up phone</li>
+        <li>Input numbers</li>
+        <li>Click call</li>
+        <li>Pick up phone</li>
+        <li>Input numbers</li>
+        <li>Click call</li>
+        <li>Pick up phone</li>
+        <li>Input numbers</li>
+        <li>Click call</li>
+      </ul>
+    </div>
+    <div class="todoCard">
+      <input class="todoTitle" type="text" name="todotitle" id="todotitle" placeholder="Title of the Todo">
+      <p class="todoCategory">Description:</p>
+      <input class="newtodoinput" type="text" name="tododesc" id="tododesc">
+      <p class="todoCategory">Due date:</p>
+      <input class="newtodoinput" type="date" name="tododuedate" id="tododuedate">
+      <p class="todoCategory">Priority:</p>
+      <select class="priorityinput" name="todopriority" id="todopriority">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <p class="todoCategory">Checklist:</p>
+      <ul class="newCardChecklist">
+        <li class="newCardChecklist"><input type="text" name="check"></li>
+      </ul>
+      <img src="./assets/plus-icon-17.jpg" alt="Add to checklist" id="addcheck"></img>
+      <button class="add-button" id="submittodo">Add Todo</button>
+    </div>
+
   </div>
   <footer>
     By Shedcape
