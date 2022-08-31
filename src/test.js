@@ -113,7 +113,7 @@ addCheck.addEventListener('click', () => {
   input.type = "text";
   input.name = "check";
   li.appendChild(input);
-  document.querySelector('.todoCard > ul.newCardChecklist').appendChild(li);
+  document.querySelector('.create-todo > ul.newCardChecklist').appendChild(li);
 })
 
 const addTodotest = document.getElementById('submittodo');
@@ -128,3 +128,105 @@ addTodotest.addEventListener('click', (e) => {
   const checkListValue = checkList.map(x => Array.from(x.childNodes))[0].filter(x => x.tagName === "LI").map(x => x.firstChild.value);
   console.log(checkListValue)
 })
+
+const changeTodoButtons = document.querySelectorAll('.changeTodo');
+changeTodoButtons.forEach(x => x.addEventListener('click', (e) => {
+  console.log(e)
+  console.log(e.target.parentElement)
+  const children = Array.from(e.target.parentElement.childNodes).filter(x => /P|H1/.test(x.tagName)).filter(x => x.classList.contains('todoText') || x.classList.contains("todoTitle")).map(el => el.textContent);
+  console.log(children)
+  const checklist = Array.from(e.target.parentElement.childNodes).filter(x => /UL/.test(x)).map(x => Array.from(x.childNodes))[0].filter(el => el.tagName === "LI").map(li => li.textContent);
+  console.log(checklist)
+  const values = [children, checklist]
+  const newTodo = componentChangeTodo(checklist.length, values)
+  e.target.parentElement.parentElement.insertBefore(newTodo, e.target.parentElement.nextElementSibling)
+}))
+
+/**
+ *   const inputs = [createInput('todoTitle'), createInput("newtodoinput"), createInput("newtodoinput"), createSelect()]
+  
+children.forEach((x, i) => {
+    const value = x.innerHTML;
+    const parent = e.target.parentElement;
+    const input = inputs[i];
+    input.value = value;
+    parent.insertBefore(input, x);
+    x.remove();
+  });
+ */
+
+/**
+ * Below is a bunch of functions in an attempt to create an entirely new card. 
+ * Trying to decide between the approach of replacing each part on an existing card element with inputs to change a todo, or replace it with an entirely new card element with inputs. 
+ * Further tinkering is needed. 
+ * 
+ *  
+ * 
+ */
+function createInput(cssClass, type) {
+  const input = document.createElement('input');
+  input.classList.add(cssClass);
+  input.type = type;
+  return input;
+}
+
+
+function createSelect() {
+  const select = document.createElement('select');
+  select.classList.add('priorityinput');
+  function createOption(value) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.innerHTML = value;
+    return option;
+  }
+  const options = [createOption('Low'), createOption('Medium'), createOption('High')];
+  options.forEach(x => select.appendChild(x));
+  return select;
+}
+
+function createCheckList(cssClass, nr, values = []) {
+  const ul = document.createElement('ul');
+  ul.classList.add(cssClass);
+  function createLi(value = "") {
+    const li = document.createElement('li');
+    li.classList.add(cssClass);
+    if (cssClass === "newCardChecklist") {
+      const input = document.createElement('input');
+      input.type = "text";
+      input.name = "check";
+      input.value = value;
+      li.appendChild(input);
+    } else {
+      li.value = value;
+    }
+    return li;
+  }
+  for (let i = 0; i < nr; i++) {
+    const li = createLi(values[i]);
+    ul.appendChild(li);
+  }
+  return ul;
+}
+
+function componentChangeTodo(nr, values) {
+  const inputs = [createInput('todoTitle', "text"), createInput("newtodoinput", "text"), createInput("newtodoinput", "date"), createSelect()]
+  const [inputValues, checklistValues] = values;
+  inputs.forEach((input, i) => input.value = inputValues[i]);
+  const ul = createCheckList('newCardChecklist', nr, checklistValues);
+  const [titleInput, descInput, dateInput, priority] = inputs;
+  function p(text) {
+    const p = document.createElement('p')
+    p.classList.add('todoCategory');
+    p.innerHTML = text;
+    return p;
+  }
+  const ps = [p("Description:"), p("Due Date:"), p("Priority:"), p("Checklist:")];
+  const [description, dueDate, prioText, checklistText] = ps;
+  const order = [titleInput, description, descInput, dueDate, dateInput, prioText, priority, checklistText, ul];
+  const todoCard = document.createElement('div');
+  todoCard.classList.add('todoCard');
+  order.forEach(x => console.log(x))
+  order.forEach(x => todoCard.appendChild(x));
+  return todoCard;
+}
