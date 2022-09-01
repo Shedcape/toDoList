@@ -160,7 +160,10 @@ children.forEach((x, i) => {
  * Trying to decide between the approach of replacing each part on an existing card element with inputs to change a todo, or replace it with an entirely new card element with inputs. 
  * Further tinkering is needed. 
  * 
- *  
+ *  Note to self
+ * Two possible approaches to investigate:
+ * First of all to use the method Node.replaceWith(newNode) to replace the p elements with input elements. Perhaps do some form of attribute transer as part of it as a separate function. 
+ * Second of all to use styled disabled input elements to display the value, and when the button to change is clicked a method/function turns them enabled instead. The change button would be turned into a save button that when saved updates the relevant data structures. 
  * 
  */
 function createInput(cssClass, type) {
