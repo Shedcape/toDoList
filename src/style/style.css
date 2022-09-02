@@ -6,6 +6,7 @@
 body {
   display: grid;
   width: 100vw;
+  height: 100vh;
   grid-template-columns: 10% 90%;
   grid-template-rows: 75px 1fr 30px;
 }
@@ -123,7 +124,7 @@ aside {
 .project-image {
   width: 25px;
   height: 25px;
-  padding-right: 10px;
+  margin-bottom: 1px
 }
 
 .project:hover .delete-project {
@@ -190,8 +191,36 @@ aside {
   box-shadow: 0px 2px 6px 0px rgba(5, 5, 5, 0.40);
 }
 
-.todoCard>ul>li {
+.todoCard>ul>li,
+ul {
   list-style: inside;
+}
+
+.todoCard>fieldset {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+input {
+  font-family: inherit;
+}
+
+.todoCard input:disabled,
+select:disabled {
+  border: none;
+  color: black;
+  user-select: all;
+  cursor: text;
+  font-family: inherit;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+
 }
 
 .changeTodo {
@@ -201,6 +230,13 @@ aside {
   left: 85%;
   top: -4%;
   visibility: hidden;
+}
+
+.saveChange {
+  width: 30px;
+  height: 30px;
+  left: 84%;
+  top: -5%;
 }
 
 .changeTodo:hover,
@@ -222,9 +258,19 @@ aside {
   height: 20px;
   position: relative;
   left: 93%;
-  top: -8%;
+  top: -7.6%;
   visibility: hidden;
 }
+
+.tempDelete {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  left: 93%;
+  top: -9.4%;
+  visibility: hidden;
+}
+
 
 .todoCard:hover .delete-todo {
   visibility: visible;
@@ -250,9 +296,18 @@ aside {
   margin-left: 10px;
 }
 
+li>input.todoText {
+  margin-bottom: 0px;
+}
+
 .todoChecklist {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   margin-left: 20px;
+}
+
+.checkbuttons {
+  display: flex;
+  flex-direction: row;
 }
 
 .newCard {
@@ -285,17 +340,20 @@ aside {
   border: 1px solid black;
 }
 
-#addcheck {
+.addcheck,
+.removecheck {
   height: 20px;
   width: 20px;
-  margin: 10px 10px 10px 14px
+  margin: 5px 10px 10px 14px
 }
 
-#addcheck:hover {
+.addcheck:hover,
+.removecheck:hover {
   transform: scale(1.2)
 }
 
-#addcheck:active {
+.addcheck:active,
+.removecheck:hover {
   transform: scale(1.1);
 }
 
@@ -330,6 +388,7 @@ aside {
 }
 
 
+
 @media (max-width: 700px) {
   aside {
     display: none;
@@ -341,6 +400,10 @@ aside {
     width: 100%;
     grid-column: 1 /3;
     grid-template-columns: repeat(auto-fill, minmax(350px, 95%));
+  }
+
+  body {
+    height: auto;
   }
 
   .todoCard {

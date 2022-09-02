@@ -52,6 +52,49 @@ const domControl = {
   projectContainer: document.querySelector(".project-container"),
   newProjectPrompt() {
     if (document.getElementById('project-name')) return;
+    const div = domCreation.newProject();
+    domControl.projectContainer.appendChild(div);
+  },
+  removeNewProjectPrompt() {
+    domControl.projectContainer.removeChild(domControl.projectContainer.lastElementChild);
+  },
+  addToProjectDom(el) {
+    domControl.projectContainer.appendChild(el);
+  },
+  removeProjectFromDom(id) {
+    document.getElementById(id).remove();
+  },
+  removeElement(el) {
+    el.remove();
+  },
+  appendChild(target, el) {
+    target.appendChild(el);
+  },
+  changeToDo(el) {
+    const changeButton = el.children[1];
+    const removeButton = el.children[2];
+    const addCheckButton = el.children[11].children[0];
+    const removeCheckButton = el.children[11].children[1];
+    if (el.disabled) {
+      el.disabled = false;
+      changeButton.src = "./assets/save-as-icon-9.jpg"
+      changeButton.classList.add('saveChange');
+      removeButton.classList.add('tempDelete')
+      addCheckButton.style.visibility = "visible";
+      removeCheckButton.style.visibility = "visible";
+    } else {
+      el.disabled = true;
+      changeButton.src = "./assets/options-icon-png-1.jpg"
+      changeButton.classList.remove('saveChange');
+      addCheckButton.style.visibility = "hidden";
+      removeCheckButton.style.visibility = "hidden";
+      removeButton.classList.remove('tempDelete')
+    }
+
+  }
+}
+const domCreation = {
+  newProject() {
     const div = document.createElement('div');
     div.classList.add('add-project');
     const input = document.createElement('input');
@@ -68,16 +111,7 @@ const domControl = {
     cancelButton.classList.add('cancel-button');
     cancelButton.addEventListener('click', domControl.removeNewProjectPrompt);
     div.appendChild(cancelButton);
-    domControl.projectContainer.appendChild(div);
-  },
-  removeNewProjectPrompt() {
-    domControl.projectContainer.removeChild(domControl.projectContainer.lastElementChild);
-  },
-  addToProjectDom(el) {
-    domControl.projectContainer.appendChild(el);
-  },
-  removeProjectFromDom(id) {
-    document.getElementById(id).remove();
+    return div;
   }
 }
 
@@ -103,18 +137,27 @@ const control = {
 const addProjectButton = document.querySelector('.new');
 addProjectButton.addEventListener('click', domControl.newProjectPrompt)
 
-const addCheck = document.getElementById('addcheck');
-addCheck.addEventListener('click', () => {
-  const checks = document.querySelectorAll('.newCardChecklist > li');
-  if (checks.length > 5) return;
+const addCheck = document.querySelectorAll('.addcheck');
+addCheck.forEach(x => x.addEventListener('click', (e) => {
+  const ul = e.target.parentElement.parentElement.children[10];
+  if (ul.children.length > 5) return;
   const li = document.createElement('li');
-  li.classList.add('newCardChecklist');
   const input = document.createElement('input');
+  input.classList.add('todoText')
   input.type = "text";
-  input.name = "check";
+  input.name = "checklistelement";
   li.appendChild(input);
-  document.querySelector('.create-todo > ul.newCardChecklist').appendChild(li);
-})
+  domControl.appendChild(ul, li)
+}))
+
+const removeCheck = document.querySelectorAll('.removecheck');
+removeCheck.forEach(x => x.addEventListener('click', (e) => {
+  const ul = e.target.parentElement.parentElement.children[10];
+  if (ul.lastElementChild) {
+    domControl.removeElement(ul.lastElementChild);
+  }
+}))
+
 
 const addTodotest = document.getElementById('submittodo');
 addTodotest.addEventListener('click', (e) => {
@@ -131,16 +174,16 @@ addTodotest.addEventListener('click', (e) => {
 
 const changeTodoButtons = document.querySelectorAll('.changeTodo');
 changeTodoButtons.forEach(x => x.addEventListener('click', (e) => {
-  console.log(e)
-  console.log(e.target.parentElement)
-  const children = Array.from(e.target.parentElement.childNodes).filter(x => /P|H1/.test(x.tagName)).filter(x => x.classList.contains('todoText') || x.classList.contains("todoTitle")).map(el => el.textContent);
-  console.log(children)
-  const checklist = Array.from(e.target.parentElement.childNodes).filter(x => /UL/.test(x)).map(x => Array.from(x.childNodes))[0].filter(el => el.tagName === "LI").map(li => li.textContent);
-  console.log(checklist)
-  const values = [children, checklist]
-  const newTodo = componentChangeTodo(checklist.length, values)
-  e.target.parentElement.parentElement.insertBefore(newTodo, e.target.parentElement.nextElementSibling)
+  domControl.changeToDo(e.target.parentElement);
 }))
+
+
+const deleteTodoButtons = document.querySelectorAll('.delete-todo');
+deleteTodoButtons.forEach(x => x.addEventListener('click', (e) => {
+  const element = e.target.parentElement.parentElement
+  domControl.removeElement(element);
+}
+))
 
 /**
  *   const inputs = [createInput('todoTitle'), createInput("newtodoinput"), createInput("newtodoinput"), createSelect()]
@@ -210,26 +253,4 @@ function createCheckList(cssClass, nr, values = []) {
     ul.appendChild(li);
   }
   return ul;
-}
-
-function componentChangeTodo(nr, values) {
-  const inputs = [createInput('todoTitle', "text"), createInput("newtodoinput", "text"), createInput("newtodoinput", "date"), createSelect()]
-  const [inputValues, checklistValues] = values;
-  inputs.forEach((input, i) => input.value = inputValues[i]);
-  const ul = createCheckList('newCardChecklist', nr, checklistValues);
-  const [titleInput, descInput, dateInput, priority] = inputs;
-  function p(text) {
-    const p = document.createElement('p')
-    p.classList.add('todoCategory');
-    p.innerHTML = text;
-    return p;
-  }
-  const ps = [p("Description:"), p("Due Date:"), p("Priority:"), p("Checklist:")];
-  const [description, dueDate, prioText, checklistText] = ps;
-  const order = [titleInput, description, descInput, dueDate, dateInput, prioText, priority, checklistText, ul];
-  const todoCard = document.createElement('div');
-  todoCard.classList.add('todoCard');
-  order.forEach(x => console.log(x))
-  order.forEach(x => todoCard.appendChild(x));
-  return todoCard;
 }
