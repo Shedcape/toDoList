@@ -3,6 +3,13 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
+:root {
+  --button-active: hsl(175, 77%, 16%);
+  --button-hover: hsl(175, 77%, 36%);
+  --button-color: hsl(175, 77%, 26%);
+  --button-text: white;
+}
+
 body {
   display: grid;
   width: 100vw;
@@ -380,11 +387,36 @@ li>input.todoText {
   height: 500px;
   margin: 0 auto;
   bottom: 40%;
-  left: 30%;
+  left: 45%;
   border-radius: 10px;
   background-color: hsl(175, 77%, 26%);
   box-shadow: 1px 3px 0px 3000px rgba(5, 5, 5, 0.65);
   color: white;
+}
+
+.add-todoButton {
+  position: fixed;
+  left: 70%;
+  bottom: 5%;
+  z-index: 2;
+  height: 100px;
+  background-color: var(--button-color);
+  width: 100px;
+  font-family: inherit;
+  border-radius: 100%;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.add-todoButton:hover {
+  background-color: var(--button-hover);
+  transform: scale(1.2);
+}
+
+.add-todoButton:active {
+  background-color: var(--button-active);
+  transform: scale(1.1);
 }
 
 

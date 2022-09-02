@@ -50,6 +50,8 @@ const projects = {
 
 const domControl = {
   projectContainer: document.querySelector(".project-container"),
+  todoCreation: document.querySelector('.create-todo'),
+  todoContainer: document.querySelector('.container'),
   newProjectPrompt() {
     if (document.getElementById('project-name')) return;
     const div = domCreation.newProject();
@@ -75,6 +77,7 @@ const domControl = {
     const removeButton = el.children[2];
     const addCheckButton = el.children[11].children[0];
     const removeCheckButton = el.children[11].children[1];
+    console.log(el.children)
     if (el.disabled) {
       el.disabled = false;
       changeButton.src = "./assets/save-as-icon-9.jpg"
@@ -90,9 +93,18 @@ const domControl = {
       removeCheckButton.style.visibility = "hidden";
       removeButton.classList.remove('tempDelete')
     }
-
+  },
+  toggleTodoCreation() {
+    if (domControl.todoCreation.style.display === "none") {
+      domControl.todoCreation.style.display = "block";
+    } else {
+      domControl.todoCreation.style.display = "none";
+    }
   }
 }
+
+document.querySelector('.add-todoButton').addEventListener('click', domControl.toggleTodoCreation);
+
 const domCreation = {
   newProject() {
     const div = document.createElement('div');
@@ -112,6 +124,133 @@ const domCreation = {
     cancelButton.addEventListener('click', domControl.removeNewProjectPrompt);
     div.appendChild(cancelButton);
     return div;
+  },
+  newTodo(title, description, duedate, priority, checklist) {
+    const todoDiv = document.createElement('div');
+    todoDiv.classList.add('todoCard');
+    const fieldset = document.createElement('fieldset');
+    fieldset.disabled = true;
+    todoDiv.appendChild(fieldset);
+    const titleInput = domCreation.createInput("todoTitle", "text", "title", title);
+    fieldset.appendChild(titleInput);
+    const changeTodo = domCreation.todoButton("changeTodo", "./assets/options-icon-png-1.jpg", "Modify todo", (e) => {
+      domControl.changeToDo(e.target.parentElement)
+    });
+    const deleteTodo = domCreation.todoButton("delete-todo", "./assets/trash-svgrepo-com.svg", "Delete Todo", (e) => {
+      const element = e.target.parentElement.parentElement
+      domControl.removeElement(element);
+    });
+    fieldset.appendChild(changeTodo);
+    fieldset.appendChild(deleteTodo);
+    fieldset.appendChild(domCreation.todoP("Description:"));
+    const descInput = domCreation.createInput("todoCategory", "text", "Description", description);
+    fieldset.appendChild(descInput);
+    fieldset.appendChild(domCreation.todoP("Due date:"));
+    const dueDateInput = domCreation.createInput("todoCategory", "text", "Due Date", duedate);
+    fieldset.appendChild(dueDateInput);
+    fieldset.appendChild(domCreation.todoP("Priority:"));
+    const select = domCreation.createSelect(priority);
+    fieldset.appendChild(select);
+    fieldset.appendChild(domCreation.todoP("Priority:"))
+    const checkListEl = domCreation.createCheckList(checklist.length, checklist)
+    fieldset.appendChild(checkListEl);
+    fieldset.appendChild(domCreation.createCheckListButtons());
+    domControl.appendChild(domControl.todoContainer, todoDiv)
+  },
+  todoP(text) {
+    const p = document.createElement('p');
+    p.classList.add('todoCategory');
+    p.innerHTML = text;
+    return p;
+  },
+  todoButton(cssClass, src, alt, event) {
+    const img = document.createElement('img');
+    img.classList.add(cssClass);
+    img.src = src;
+    img.alt = alt;
+    img.addEventListener('click', event);
+    return img;
+  },
+  createInput(cssClass, type, name, value) {
+    const input = document.createElement('input');
+    input.classList.add(cssClass);
+    input.type = type;
+    input.name = name;
+    input.value = value;
+    return input;
+  },
+  createSelect(value) {
+    const select = document.createElement('select');
+    select.classList.add('todoText');
+    function createOption(value) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.innerHTML = value;
+      return option;
+    }
+    const options = [createOption('Low'), createOption('Medium'), createOption('High')];
+    options.forEach(x => select.appendChild(x));
+    select.value = value;
+    return select;
+  },
+  newCheck() {
+    const li = document.createElement('li');
+    const input = document.createElement('input');
+    input.classList.add('todoText')
+    input.type = "text";
+    input.name = "checklistelement";
+    li.appendChild(input);
+    return li;
+  },
+  createCheckListButtons() {
+    const div = document.createElement('div');
+    div.classList.add('checkbuttons');
+    function createButton(cssClass, src, title, alt) {
+      const button = document.createElement('img');
+      button.classList.add(cssClass);
+      button.style.visibility = 'hidden';
+      button.src = src;
+      button.title = title;
+      button.alt = alt;
+      return button;
+    }
+    const addCheckButton = createButton('addcheck', "./assets/plus-icon-17.jpg", "Add an item from the checklist", "Add to checklist");
+    addCheckButton.addEventListener('click', (e) => {
+      const ul = e.target.parentElement.parentElement.children[10];
+      if (ul.children.length > 5) return;
+      const li = domCreation.newCheck();
+      domControl.appendChild(ul, li)
+
+    });
+    const removeCheckButton = createButton('removecheck', "./assets/trash-svgrepo-com.svg", "Remove an item from the checklist", "remove check");
+    removeCheckButton.addEventListener('click', (e) => {
+      const ul = e.target.parentElement.parentElement.children[10];
+      if (ul.lastElementChild) {
+        domControl.removeElement(ul.lastElementChild);
+      }
+    })
+    div.appendChild(addCheckButton);
+    div.appendChild(removeCheckButton)
+    return div;
+  },
+  createCheckList(nr = 0, values = []) {
+    const ul = document.createElement('ul');
+    ul.classList.add("todoChecklist");
+    function createLi(value = "") {
+      const li = document.createElement('li');
+      const input = document.createElement('input');
+      input.type = "text";
+      input.name = "checklistelement";
+      input.classList.add('todoText')
+      input.value = value;
+      li.appendChild(input);
+      return li;
+    }
+    for (let i = 0; i < nr; i++) {
+      const li = createLi(values[i]);
+      ul.appendChild(li);
+    }
+    return ul;
   }
 }
 
@@ -139,7 +278,10 @@ addProjectButton.addEventListener('click', domControl.newProjectPrompt)
 
 const addCheck = document.querySelectorAll('.addcheck');
 addCheck.forEach(x => x.addEventListener('click', (e) => {
-  const ul = e.target.parentElement.parentElement.children[10];
+  let ul = e.target.parentElement.parentElement.children[10];
+  if (ul.tagName !== "UL") {
+    ul = e.target.parentElement.parentElement.children[8];
+  }
   if (ul.children.length > 5) return;
   const li = document.createElement('li');
   const input = document.createElement('input');
@@ -161,15 +303,15 @@ removeCheck.forEach(x => x.addEventListener('click', (e) => {
 
 const addTodotest = document.getElementById('submittodo');
 addTodotest.addEventListener('click', (e) => {
-  console.log(e);
-  console.log(e.target.parentElement);
-  const children = Array.from(e.target.parentElement.childNodes).filter(x => /INPUT|SELECT|UL/.test(x.tagName))
-  const checkList = children.splice(children.length - 1, 1);
-  console.log(children, checkList);
-  const mapped = children.map(x => x.value);
-  console.log(mapped)
-  const checkListValue = checkList.map(x => Array.from(x.childNodes))[0].filter(x => x.tagName === "LI").map(x => x.firstChild.value);
-  console.log(checkListValue)
+  const children = e.target.parentElement.children
+  console.log(children);
+  const filtered = Array.from(children).filter(x => /INPUT|SELECT|UL/.test(x.tagName));
+  console.log(filtered)
+  const [title, description, duedate, priority, checklist] = filtered;
+  console.log(checklist, checklist.children)
+  const checklistValues = Array.from(checklist.children).map(li => li.children[0].value);
+  console.log(checklistValues)
+  domCreation.newTodo(title.value, description.value, duedate.value, priority.value, checklistValues);
 })
 
 const changeTodoButtons = document.querySelectorAll('.changeTodo');
@@ -209,17 +351,19 @@ children.forEach((x, i) => {
  * Second of all to use styled disabled input elements to display the value, and when the button to change is clicked a method/function turns them enabled instead. The change button would be turned into a save button that when saved updates the relevant data structures. 
  * 
  */
-function createInput(cssClass, type) {
+function createInput(cssClass, type, name, value) {
   const input = document.createElement('input');
   input.classList.add(cssClass);
   input.type = type;
+  input.name = name;
+  input.value = value;
   return input;
 }
 
 
 function createSelect() {
   const select = document.createElement('select');
-  select.classList.add('priorityinput');
+  select.classList.add('todoText');
   function createOption(value) {
     const option = document.createElement('option');
     option.value = value;
@@ -231,21 +375,18 @@ function createSelect() {
   return select;
 }
 
-function createCheckList(cssClass, nr, values = []) {
+function createCheckList(nr = 0, values = []) {
   const ul = document.createElement('ul');
-  ul.classList.add(cssClass);
+  ul.classList.add(todoChecklist);
   function createLi(value = "") {
     const li = document.createElement('li');
     li.classList.add(cssClass);
-    if (cssClass === "newCardChecklist") {
-      const input = document.createElement('input');
-      input.type = "text";
-      input.name = "check";
-      input.value = value;
-      li.appendChild(input);
-    } else {
-      li.value = value;
-    }
+    const input = document.createElement('input');
+    input.type = "text";
+    input.name = "checklistelement";
+    input.classList.add('todoText checklistEl')
+    input.value = value;
+    li.appendChild(input);
     return li;
   }
   for (let i = 0; i < nr; i++) {
@@ -253,4 +394,43 @@ function createCheckList(cssClass, nr, values = []) {
     ul.appendChild(li);
   }
   return ul;
+}
+
+function createCheckListButtons() {
+  const div = document.createElement('div');
+  div.classList.add('checkbuttons');
+  function createButton(cssClass, src, title, alt) {
+    const button = document.createElement('img');
+    button.classList.add(cssClass);
+    button.style.visibility = 'hidden';
+    button.src = src;
+    button.title = title;
+    button.alt = alt;
+    return button;
+  }
+  const addCheckButton = createButton('addcheck', "./assets/plus-icon-17.jpg", "Add an item from the checklist", "Add to checklist");
+  addCheckButton.addEventListener('click', (e) => {
+    const ul = e.target.parentElement.parentElement.children[10];
+    if (ul.children.length > 5) return;
+    const li = newCheck();
+    domControl.appendChild(ul, li)
+
+  });
+  const removeCheckButton = createButton('removecheck', "./assets/trash-svgrepo-com.svg", "Remove an item from the checklist", "remove check");
+  removeCheckButton.addEventListener('click', (e) => {
+    const ul = e.target.parentElement.parentElement.children[10];
+    if (ul.lastElementChild) {
+      domControl.removeElement(ul.lastElementChild);
+    }
+  })
+  return div;
+}
+function newCheck() {
+  const li = document.createElement('li');
+  const input = document.createElement('input');
+  input.classList.add('todoText')
+  input.type = "text";
+  input.name = "checklistelement";
+  li.appendChild(input);
+  return li;
 }

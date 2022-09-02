@@ -123,13 +123,15 @@
           <li><input class="todoText checklistEl" type="text" name="checklistelement" value="Pick up phone"></li>
         </ul>
         <div class="checkbuttons">
-          <img class="addcheck" style="visibility:hidden" src="./assets/plus-icon-17.jpg" alt="Add to checklist"></img>
-          <img class="removecheck" style="visibility:hidden" src="./assets/trash-svgrepo-com.svg" alt="remove check">
+          <img class="addcheck" style="visibility:hidden" src="./assets/plus-icon-17.jpg"
+            title="Add an item from the checklist" alt="Add to checklist"></img>
+          <img class="removecheck" style="visibility:hidden" src="./assets/trash-svgrepo-com.svg"
+            title="Remove an item from the checklist" alt="remove check">
         </div>
       </fieldset>
     </div>
     <div class="todoCard create-todo">
-      <input class="todoTitle" type="text" name="todotitle" id="todotitle" placeholder="Title of the Todo">
+      <input class="todoTitle createTitle" type="text" name="todotitle" id="todotitle" placeholder="Title of the Todo">
       <p class="todoCategory">Description:</p>
       <input class="newtodoinput" type="text" name="tododesc" id="tododesc">
       <p class="todoCategory">Due date:</p>
@@ -141,13 +143,18 @@
         <option value="High">High</option>
       </select>
       <p class="todoCategory">Checklist:</p>
-      <ul class="newCardChecklist">
-        <li class="newCardChecklist"><input type="text" name="check"></li>
+      <ul class="todoChecklist">
+        <li><input class="todoText" type="text" name="check"></li>
       </ul>
-      <img class="addcheck" src="./assets/plus-icon-17.jpg" alt="Add to checklist"></img>
+      <div class="checkbuttons">
+        <img class="addcheck" src="./assets/plus-icon-17.jpg" title="Add an item from the checklist"
+          alt="Add to checklist"></img>
+        <img class="removecheck" src="./assets/trash-svgrepo-com.svg" title="Remove an item from the checklist"
+          alt="remove check">
+      </div>
       <button class="add-button" id="submittodo">Add Todo</button>
     </div>
-
+    <button class="add-todoButton">Add todo</button>
   </div>
   <footer>
     By Shedcape
