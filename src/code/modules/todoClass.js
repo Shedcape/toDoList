@@ -4,7 +4,6 @@ export default class ToDo {
     this._description = description;
     this._dueDate = dueDate;
     this._priority = priority;
-    this._notes = notes;
     this._checklist = checklist
   }
   get title() {
@@ -18,9 +17,6 @@ export default class ToDo {
   }
   get priority() {
     return this._priority;
-  }
-  get notes() {
-    return this._notes;
   }
   get checklist() {
     return this._checklist;
