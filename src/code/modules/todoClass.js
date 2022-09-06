@@ -1,5 +1,5 @@
 export default class ToDo {
-  constructor(title, description, dueDate, priority, notes = "", checklist = []) {
+  constructor(title, description, dueDate, priority, checklist = []) {
     this._title = title;
     this._description = description;
     this._dueDate = dueDate;

@@ -38,6 +38,9 @@ const projects = {
   removeProject(id) {
     this.list.splice(id, 1);
   },
+  saveTodos(projectId, todoList) {
+    this.list[projectId].toDos = todoList;
+  },
   addToDo(projectId, toDo) {
     this.list[projectId].toDos.push(toDo);
   },
@@ -91,6 +94,7 @@ const domControl = {
       removeCheckButton.style.visibility = "visible";
     } else {
       el.disabled = true;
+      control.saveProject()
       changeButton.src = "./assets/options-icon-png-1.jpg"
       changeButton.classList.remove('saveChange');
       addCheckButton.style.visibility = "hidden";
@@ -121,8 +125,15 @@ const control = {
       control.addNewToDo([todo.title, todo.description, todo.dueDate, todo.priority, todo.checklist])
     })
   },
-  saveProject(id) {
-
+  saveProject() {
+    const todoNodes = Array.from(domControl.todoContainer.children);
+    const todos = [];
+    const projectId = domControl.todoContainer.id;
+    todoNodes.forEach(todoNode => {
+      const [title, description, duedate, priority, checklist] = control.parseTodoInfo(todoNode);
+      todos.push(new ToDo(title, description, duedate, priority, checklist))
+    })
+    console.log(todos)
   },
   addNewProject() {
     const input = document.getElementById('project-name');
@@ -140,13 +151,22 @@ const control = {
     projects.removeProject(id);
     domControl.removeProjectFromDom(id);
   },
+  createTodo(e) {
+    const values = control.parseTodoInfo(e)
+    if (values === undefined) return;
+    const [title, description, duedate, priority, checklist] = values;
+    control.addNewToDo([title, description, duedate, priority, checklist])
+  },
   parseTodoInfo(e) {
-    const children = e.target.parentElement.children
+    let children = e.children
+    if (children.length < 5) {
+      children = e.children[0].children;
+    }
     const filtered = Array.from(children).filter(x => /INPUT|SELECT|UL/.test(x.tagName));
     const [title, description, duedate, priority, checklist] = filtered;
     if (title.value === "") return;
     const checklistValues = Array.from(checklist.children).map(li => li.children[0].value);
-    control.addNewToDo([title.value, description.value, duedate.value, priority.value, checklistValues])
+    return [title.value, description.value, duedate.value, priority.value, checklistValues]
   },
   addNewToDo(array) {
     const [title, description, duedate, priority, checklist] = array;
@@ -187,7 +207,8 @@ const control = {
   }
 }
 document.getElementById('submittodo').addEventListener('click', (e) => {
-  control.addNewToDo(e);
+  console.log(e, e.target.parentElement)
+  control.createTodo(e.target.parentElement);
 });
 
 const addProjectButton = document.querySelector('.new');

@@ -29,75 +29,6 @@
   </aside>
   <div class="container">
     <div class="todoCard">
-      <h1 class="todoTitle">Power Bill</h1>
-      <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
-      <img class="delete-todo" src="./assets/trash-svgrepo-com.svg" alt="Delete Todo">
-      <p class="todoCategory">Description: </p>
-      <p class="todoText">Call the electric company regarding the bill. It's too high!</p>
-      <p class="todoCategory">Due date: </p>
-      <p class="todoText">2022-08-31</p>
-      <p class="todoCategory">Priority: </p>
-      <p class="todoText">High</p>
-      <p class="todoCategory">Checklist:</p>
-      <ul class="todoChecklist">
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-      </ul>
-    </div>
-    <div class="todoCard">
-      <h1 class="todoTitle">Power Bill</h1>
-      <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
-      <p class="todoCategory">Description: </p>
-      <p class="todoText">Call the electric company regarding the bill. It's too high!</p>
-      <p class="todoCategory">Due date: </p>
-      <p class="todoText">2022-08-31</p>
-      <p class="todoCategory">Priority: </p>
-      <p class="todoText">High</p>
-      <p class="todoCategory">Checklist:</p>
-      <ul class="todoChecklist">
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-      </ul>
-    </div>
-    <div class="todoCard">
-      <input class="todoTitle" type="text" name="" value="Power Bill" disabled="disabled">
-      <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
-      <p class="todoCategory">Description: </p>
-      <input class="todoText" type="text" name="Description" disabled="disabled"
-        value="Call the electric company regarding the bill. It's too high!">
-      <p class="todoCategory">Due date: </p>
-      <input class="todoText duedate" type="text" name="Due Date" disabled="disabled" value="2022-08-31">
-      <p class="todoCategory">Priority: </p>
-      <select class="todoText" name="todopriority" disabled="disabled" value="Medium">
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
-      <p class="todoCategory">Checklist:</p>
-      <ul class="todoChecklist">
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-        <li>Pick up phone</li>
-        <li>Input numbers</li>
-        <li>Click call</li>
-      </ul>
-    </div>
-    <div class="todoCard">
       <fieldset disabled="disabled">
         <input class="todoTitle" type="text" name="" value="Power Bill">
         <img class="changeTodo" src="./assets/options-icon-png-1.jpg" alt="Modify todo">
@@ -130,32 +61,33 @@
         </div>
       </fieldset>
     </div>
-    <div class="todoCard create-todo">
-      <input class="todoTitle createTitle" type="text" name="todotitle" id="todotitle" placeholder="Title of the Todo">
-      <p class="todoCategory">Description:</p>
-      <input class="newtodoinput" type="text" name="tododesc" id="tododesc">
-      <p class="todoCategory">Due date:</p>
-      <input class="newtodoinput" type="date" name="tododuedate" id="tododuedate">
-      <p class="todoCategory">Priority:</p>
-      <select class="priorityinput" name="todopriority" id="todopriority">
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
-      <p class="todoCategory">Checklist:</p>
-      <ul class="todoChecklist">
-        <li><input class="todoText" type="text" name="check"></li>
-      </ul>
-      <div class="checkbuttons">
-        <img class="addcheck" src="./assets/plus-icon-17.jpg" title="Add an item from the checklist"
-          alt="Add to checklist"></img>
-        <img class="removecheck" src="./assets/trash-svgrepo-com.svg" title="Remove an item from the checklist"
-          alt="remove check">
-      </div>
-      <button class="add-button" id="submittodo">Add Todo</button>
-    </div>
-    <button class="add-todoButton">Add todo</button>
   </div>
+  <button class="add-todoButton">Add todo</button>
+  <div class="todoCard create-todo">
+    <input class="todoTitle createTitle" type="text" name="todotitle" id="todotitle" placeholder="Title of the Todo">
+    <p class="todoCategory">Description:</p>
+    <input class="newtodoinput" type="text" name="tododesc" id="tododesc">
+    <p class="todoCategory">Due date:</p>
+    <input class="newtodoinput" type="date" name="tododuedate" id="tododuedate">
+    <p class="todoCategory">Priority:</p>
+    <select class="priorityinput" name="todopriority" id="todopriority">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+    <p class="todoCategory">Checklist:</p>
+    <ul class="todoChecklist">
+      <li><input class="todoText" type="text" name="check"></li>
+    </ul>
+    <div class="checkbuttons">
+      <img class="addcheck" src="./assets/plus-icon-17.jpg" title="Add an item from the checklist"
+        alt="Add to checklist"></img>
+      <img class="removecheck" src="./assets/trash-svgrepo-com.svg" title="Remove an item from the checklist"
+        alt="remove check">
+    </div>
+    <button class="add-button" id="submittodo">Add Todo</button>
+  </div>
+
   <footer>
     By Shedcape
   </footer>
