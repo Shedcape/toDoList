@@ -29,10 +29,10 @@ const domCreation = {
     fieldset.appendChild(changeTodo);
     fieldset.appendChild(deleteTodo);
     fieldset.appendChild(domCreation.todoP("Description:"));
-    const descInput = domCreation.createInput("todoCategory", "text", "Description", description);
+    const descInput = domCreation.createInput("todoText", "text", "Description", description);
     fieldset.appendChild(descInput);
     fieldset.appendChild(domCreation.todoP("Due date:"));
-    const dueDateInput = domCreation.createInput("todoCategory", "text", "Due Date", duedate);
+    const dueDateInput = domCreation.createInput("todoText", "text", "Due Date", duedate);
     fieldset.appendChild(dueDateInput);
     fieldset.appendChild(domCreation.todoP("Priority:"));
     const select = domCreation.createSelect(priority);

@@ -8,6 +8,7 @@
   --button-hover: hsl(175, 77%, 36%);
   --button-color: hsl(175, 77%, 26%);
   --button-text: white;
+  --border-color: black;
 }
 
 body {
@@ -21,7 +22,7 @@ body {
 header {
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--border-color);
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -50,7 +51,7 @@ aside {
   height: 100%;
   grid-column: 1 / 2;
   grid-row: 2 / 3;
-  border-right: 2px solid black;
+  border-right: 2px solid var(--border-color);
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 50px 1fr;
@@ -191,7 +192,7 @@ aside {
 .todoCard {
   height: 100%;
   width: 100%;
-  border: 5px solid black;
+  border: 5px solid var(--border-color);
   display: flex;
   flex-direction: column;
   border-radius: 15px;
@@ -391,7 +392,7 @@ li>input.todoText {
   display: none;
   position: sticky;
   z-index: 1;
-  width: auto;
+  width: 400px;
   height: 500px;
   margin: 0 auto;
   bottom: 40%;

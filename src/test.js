@@ -42,12 +42,17 @@ const projects = {
     this.list[projectId].toDos = todoList;
   },
   addToDo(projectId, toDo) {
+    console.log(this.list[1])
     this.list[projectId].toDos.push(toDo);
   },
   removeToDo(projectId, name) {
     const index = this.list[projectId].toDos.findIndex(x => x.name === name);
     this.list[projectId].toDos.splice(index, 1);
   },
+  retrieveTodos(projectId) {
+    const todos = this.list[projectId].toDos;
+    return todos;
+  }
 };
 
 const domControl = {
@@ -84,7 +89,6 @@ const domControl = {
     const removeButton = el.children[2];
     const addCheckButton = el.children[11].children[0];
     const removeCheckButton = el.children[11].children[1];
-    console.log(el.children)
     if (el.disabled) {
       el.disabled = false;
       changeButton.src = "./assets/save-as-icon-9.jpg"
@@ -151,17 +155,8 @@ const control = {
     projects.removeProject(id);
     domControl.removeProjectFromDom(id);
   },
-  createTodo(e) {
-    const values = control.parseTodoInfo(e)
-    if (values === undefined) return;
-    const [title, description, duedate, priority, checklist] = values;
-    control.addNewToDo([title, description, duedate, priority, checklist])
-  },
   parseTodoInfo(e) {
     let children = e.children
-    if (children.length < 5) {
-      children = e.children[0].children;
-    }
     const filtered = Array.from(children).filter(x => /INPUT|SELECT|UL/.test(x.tagName));
     const [title, description, duedate, priority, checklist] = filtered;
     if (title.value === "") return;
@@ -170,6 +165,8 @@ const control = {
   },
   addNewToDo(array) {
     const [title, description, duedate, priority, checklist] = array;
+    console.log(Number(domControl.todoContainer.id))
+    projects.addToDo(Number(domControl.todoContainer.id), new ToDo(title, description, duedate, priority, checklist))
     const todoDiv = domCreation.newTodo(title, description, duedate, priority, checklist)
     const [addCheck, deleteCheck] = todoDiv.childNodes[0].childNodes[11].childNodes;
     addCheck.addEventListener('click', (e) => {
@@ -206,9 +203,14 @@ const control = {
     }
   }
 }
-document.getElementById('submittodo').addEventListener('click', (e) => {
-  console.log(e, e.target.parentElement)
-  control.createTodo(e.target.parentElement);
+document.getElementById('submittodo').addEventListener('click', () => {
+  const title = document.getElementById('todotitle').value;
+  const description = document.getElementById('tododesc').value;
+  const duedate = document.getElementById('tododuedate').value;
+  const priority = document.getElementById('todopriority').value;
+  const checklist = document.getElementById('todochecklist');
+  const checklistValues = Array.from(checklist.children).map(li => li.children[0].value)
+  control.addNewToDo([title, description, duedate, priority, checklistValues])
 });
 
 const addProjectButton = document.querySelector('.new');
