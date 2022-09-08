@@ -8,52 +8,96 @@ class Project {
     this.toDos = [];
   }
 }
-
-const projects = {
-  list: [{
-    name: "test1",
-    toDos: [],
-  },
-  {
-    name: "test2",
-    toDos: [],
-  },
-  {
-    name: "test3",
-    toDos: [
-      {
-        name: "todo1",
-      },
-      {
-        name: "todo2",
-      }
-    ],
-  },],
+class ProjectsList {
+  constructor(list) {
+    this.list = list;
+  }
   get length() {
     return this.list.length;
-  },
+  }
   addProject(project) {
     this.list.push(project);
-  },
+  }
   removeProject(id) {
     this.list.splice(id, 1);
-  },
+  }
   saveTodos(projectId, todoList) {
     this.list[projectId].toDos = todoList;
-  },
+    console.log(this.list[projectId].toDos)
+  }
   addToDo(projectId, toDo) {
-    console.log(this.list[1])
+    console.log(projectId)
     this.list[projectId].toDos.push(toDo);
-  },
+  }
   removeToDo(projectId, name) {
     const index = this.list[projectId].toDos.findIndex(x => x.name === name);
     this.list[projectId].toDos.splice(index, 1);
-  },
+  }
   retrieveTodos(projectId) {
     const todos = this.list[projectId].toDos;
     return todos;
   }
-};
+  retrieveProjectId(projectName) {
+    return this.list.findIndex(project => project.name === projectName)
+  }
+}
+
+let projects = new ProjectsList(
+  [
+    {
+      name: "test1",
+      toDos: [],
+    },
+    {
+      name: "test2",
+      toDos: [],
+    },
+    {
+      name: "Project 1",
+      toDos: [
+        {
+          title: "Power Bill",
+          description: "Call the electric company regarding the bill. It's too high!",
+          dueDate: "2022-09-08",
+          priority: "Medium",
+          checklist: ["Hello", "Call", "Hi there"],
+        }
+      ]
+    },
+    {
+      name: "test3",
+      toDos: [
+        {
+          name: "todo1",
+        },
+        {
+          name: "todo2",
+        }
+      ],
+    },
+  ]
+)
+
+const test2 = JSON.stringify(projects)
+console.log(test2)
+console.log(JSON.parse(test2))
+console.log(projects)
+projects = new ProjectsList(JSON.parse(test2).list)
+console.log(projects)
+localStorage.setItem("list", JSON.stringify(projects));
+projects = new ProjectsList(JSON.parse(localStorage.getItem("list")).list)
+console.log(projects);
+console.log(projects.retrieveProjectId("test1"));
+
+const storage = {
+  storeData() {
+    localStorage.setItem("list", JSON.stringify(projects));
+  },
+  retrieveData() {
+    let storedData = JSON.parse(localStorage.getItem("list"));
+    projects = new ProjectsList(storedData.list);
+  }
+}
 
 const domControl = {
   projectContainer: document.querySelector(".project-container"),
@@ -76,7 +120,7 @@ const domControl = {
     document.getElementById(id).remove();
   },
   changeContainerId(id) {
-    domControl.projectContainer.id = id;
+    domControl.todoContainer.id = id;
   },
   removeElement(el) {
     el.remove();
@@ -114,13 +158,16 @@ const domControl = {
     }
   },
   emptyContainer() {
-    while (domControl.projectContainer.lastElementChild) {
-      domControl.projectContainer.removeChild(domControl.projectContainer.lastElementChild);
+    while (domControl.todoContainer.lastElementChild) {
+      domControl.todoContainer.removeChild(domControl.todoContainer.lastElementChild);
     }
   }
 }
-
 document.querySelector('.add-todoButton').addEventListener('click', domControl.toggleTodoCreation);
+
+document.querySelector('.project-name').addEventListener('click', (e) => {
+  control.switchProject(e);
+})
 
 const control = {
   loadProject(id, todos) {
@@ -132,12 +179,21 @@ const control = {
   saveProject() {
     const todoNodes = Array.from(domControl.todoContainer.children);
     const todos = [];
-    const projectId = domControl.todoContainer.id;
+    const projectId = projects.retrieveProjectId(domControl.todoContainer.id);
     todoNodes.forEach(todoNode => {
       const [title, description, duedate, priority, checklist] = control.parseTodoInfo(todoNode);
       todos.push(new ToDo(title, description, duedate, priority, checklist))
     })
-    console.log(todos)
+    projects.saveTodos(projectId, todos)
+
+  },
+  switchProject(e) {
+    control.saveProject();
+    domControl.emptyContainer();
+    const projectName = e.target.innerHTML
+    const id = projects.retrieveProjectId(projectName);
+    domControl.changeContainerId(projectName);
+    this.loadProject(projectName, projects.retrieveTodos(id))
   },
   addNewProject() {
     const input = document.getElementById('project-name');
@@ -145,18 +201,20 @@ const control = {
     projects.addProject(new Project(input.value))
     const projectDomElement = createProjectDomElement(projects.length, input.value);
     projectDomElement.childNodes[2].addEventListener('click', (e) => {
+      stopPropagation()
       control.removeProject(e);
     })
     domControl.removeNewProjectPrompt();
     domControl.addToProjectDom(projectDomElement);
   },
   removeProject(e) {
+    console.log("triggered")
     const id = e.target.parentElement.id
     projects.removeProject(id);
     domControl.removeProjectFromDom(id);
   },
   parseTodoInfo(e) {
-    let children = e.children
+    let children = e.children[0].children
     const filtered = Array.from(children).filter(x => /INPUT|SELECT|UL/.test(x.tagName));
     const [title, description, duedate, priority, checklist] = filtered;
     if (title.value === "") return;
@@ -165,8 +223,6 @@ const control = {
   },
   addNewToDo(array) {
     const [title, description, duedate, priority, checklist] = array;
-    console.log(Number(domControl.todoContainer.id))
-    projects.addToDo(Number(domControl.todoContainer.id), new ToDo(title, description, duedate, priority, checklist))
     const todoDiv = domCreation.newTodo(title, description, duedate, priority, checklist)
     const [addCheck, deleteCheck] = todoDiv.childNodes[0].childNodes[11].childNodes;
     addCheck.addEventListener('click', (e) => {
@@ -185,7 +241,6 @@ const control = {
       domControl.removeElement(element);
     });
     domControl.appendChild(domControl.todoContainer, todoDiv);
-    domControl.toggleTodoCreation()
   },
   addCheck(e) {
     let ul = e.target.parentElement.parentElement.children[10];
@@ -211,6 +266,9 @@ document.getElementById('submittodo').addEventListener('click', () => {
   const checklist = document.getElementById('todochecklist');
   const checklistValues = Array.from(checklist.children).map(li => li.children[0].value)
   control.addNewToDo([title, description, duedate, priority, checklistValues])
+  const projectId = projects.retrieveProjectId(domControl.todoContainer.id)
+  projects.addToDo(projectId, new ToDo(title, description, duedate, priority, checklist))
+  domControl.toggleTodoCreation()
 });
 
 const addProjectButton = document.querySelector('.new');
@@ -258,3 +316,6 @@ deleteTodoButtons.forEach(x => x.addEventListener('click', (e) => {
   domControl.removeElement(element);
 }
 ))
+
+window.onload = storage.retrieveData();
+window.onbeforeunload = storage.storeData();
