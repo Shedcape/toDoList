@@ -188,8 +188,10 @@ const control = {
 
   },
   switchProject(e) {
-    control.saveProject();
-    domControl.emptyContainer();
+    if (domControl.todoContainer.lastElementChild) {
+      control.saveProject();
+      domControl.emptyContainer();
+    }
     const projectName = e.target.innerHTML
     const id = projects.retrieveProjectId(projectName);
     domControl.changeContainerId(projectName);
@@ -199,10 +201,13 @@ const control = {
     const input = document.getElementById('project-name');
     if (input.value === "") return;
     projects.addProject(new Project(input.value))
-    const projectDomElement = createProjectDomElement(projects.length, input.value);
+    const projectDomElement = createProjectDomElement(projects.length - 1, input.value);
     projectDomElement.childNodes[2].addEventListener('click', (e) => {
-      stopPropagation()
       control.removeProject(e);
+      domControl.emptyContainer();
+    })
+    projectDomElement.childNodes[1].addEventListener('click', (e) => {
+      control.switchProject(e);
     })
     domControl.removeNewProjectPrompt();
     domControl.addToProjectDom(projectDomElement);
@@ -210,8 +215,10 @@ const control = {
   removeProject(e) {
     console.log("triggered")
     const id = e.target.parentElement.id
+    console.log(id)
     projects.removeProject(id);
     domControl.removeProjectFromDom(id);
+    console.log(projects)
   },
   parseTodoInfo(e) {
     let children = e.children[0].children
@@ -317,5 +324,9 @@ deleteTodoButtons.forEach(x => x.addEventListener('click', (e) => {
 }
 ))
 
-window.onload = storage.retrieveData();
+const dummyprojects = () => {
+
+}
+
+window.onload = localStorage.length > 0 ? storage.retrieveData() : dummyprojects();
 window.onbeforeunload = storage.storeData();
